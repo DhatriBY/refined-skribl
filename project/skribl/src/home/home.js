@@ -1,0 +1,80 @@
+import React, { useState } from "react";
+import "./home.scss";
+import { Link } from "react-router-dom";
+
+function Homepage({ socket }) {
+  const [username, setusername] = useState("");
+  const [roomname, setroomname] = useState("");
+  //activates joinRoom function defined on the backend
+  const sendData = () => {
+    if (username !== "" && roomname !== "") {
+      socket.emit("joinRoom", { username, roomname });
+      //if empty error message pops up and returns to the same page
+    }
+    else if (username !== "" && roomname == "") {
+      socket.emit("joinRoom", { username, roomname });
+      //if empty error message pops up and returns to the same page
+    }
+    
+    else{
+      alert("username must be present");
+      window.location.reload();
+    }
+  };
+  if(roomname != "")
+  return (
+    <div className="homepage">
+      <h1>Welcome to Skribl</h1>
+      <input
+        placeholder="Input your user name"
+        value={username}
+        onChange={(e) => setusername(e.target.value)}
+      ></input>
+      <input
+        placeholder="create lobby by giving code/
+                       join existing with private code"
+        value={roomname}
+        onChange={(e) => setroomname(e.target.value)}
+      ></input>
+      
+      <Link to={`/chat/${roomname}/${username}`}>
+        <button onClick={sendData}>Play</button>
+      </Link> 
+      <Link to={`/chat/${roomname}/${username}`}>
+        <button onClick={sendData}>Createlobby</button>
+      </Link> 
+     
+
+      
+    </div>
+  );
+  else 
+  return (
+    <div className="homepage">
+      <h1>Welcome to Skribl</h1>
+      <input
+        placeholder="Input your user name"
+        value={username}
+        onChange={(e) => setusername(e.target.value)}
+      ></input>
+      <input
+        placeholder="create lobby by giving code/
+                       join existing with private code"
+        value={roomname}
+        onChange={(e) => setroomname(e.target.value)}
+      ></input>
+      
+      <Link to={`/chat/public/${username}`}>
+        <button onClick={sendData}>Play</button>
+      </Link> 
+      <Link to={`/chat/${roomname}/${username}`}>
+        <button onClick={sendData}>Createlobby</button>
+      </Link>
+     
+
+      
+    </div>
+  );
+}
+
+export default Homepage;
